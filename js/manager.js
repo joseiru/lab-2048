@@ -57,6 +57,7 @@ Game2048.prototype._moveLeft = function () {
 
     for(i = 0; i < newRow.length - 1; i++) {
       if (newRow[i+1] === newRow[i]) {
+        ion.sound.play("tap");
         newRow[i]   = newRow[i] * 2;
         newRow[i+1] = null;
         that._updateScore(newRow[i]);
@@ -93,6 +94,7 @@ Game2048.prototype._moveRight = function () {
 
     for(i = newRow.length - 1; i > 0; i--) {
       if (newRow[i-1] === newRow[i]) {
+        ion.sound.play("tap");
         newRow[i]   = newRow[i] * 2;
         newRow[i-1] = null;
         that._updateScore(newRow[i]);
@@ -142,6 +144,7 @@ Game2048.prototype._moveDown = function () {
 }
 
 Game2048.prototype.move = function (direction) {
+  ion.sound.play("snap");
   if (!this._gameFinished()) {
     switch (direction) {
       case "up":    boardChanged = this._moveUp();    break;
@@ -157,6 +160,14 @@ Game2048.prototype.move = function (direction) {
   }
 };
 
+Game2048.prototype._gameFinished = function () {
+  if (this.win() || this.lose()) {
+    return true;
+  } else {
+    return false;
+  } 
+}
+
 Game2048.prototype._updateScore = function (value) {
   this.score += value;
 
@@ -167,6 +178,10 @@ Game2048.prototype._updateScore = function (value) {
 
 Game2048.prototype.win = function () {
   return this.won;
+}
+
+Game2048.prototype.lose = function () {
+  return this.lost;
 }
 
 Game2048.prototype._isGameLost = function () {
